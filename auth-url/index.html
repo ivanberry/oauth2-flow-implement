@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>OAuth 2.0</title>
+	<style>
+		button {
+			border: 1px solid grey;
+			padding: 10px 20px;
+			font-size: 16px;
+			background: transparent;
+			outline: none;
+		}
+		.primary {
+			background: #1790FF; 
+			color: #fff;
+		}
+	</style>
+</head>
+<body>
+	<div>
+		<h2>获取一下信息，是否同意授权</h2>
+		<ul>
+			<li><b>Read</b> xxx</li>
+			<li><b>Read and Write</b> xxxx</li>
+		</ul>
+	</div>
+	<button id="grant" class="primary">Grant</button>
+	<button>Cancel</button>
+	<script>
+
+		initPage();
+
+		const grantNode = document.getElementById('grant');
+
+		function initPage(argument) {
+			const params = getParams();
+			window.params = params;
+		}
+
+		function getParams() {
+			const {search} = window.location;
+			const urlParams = new URLSearchParams(search);
+			return urlParams;
+		}
+
+		grantNode.addEventListener('click', (ev) => {
+			// get all paramters
+			const urlParamsEntries = getParams().entries();
+			const TOKEN_URL = 'https://auth.icarbonx.com/oauth2/token';
+
+			const postData = Object.create(null);
+
+			for (let o of urlParamsEntries) {
+				postData[o[0]] = o[1];
+			}
+
+			console.log(postData);
+
+			// new XML
+			const xhr = new XMLHttpRequest();
+
+			xhr.open('POST', TOKEN_URL); // get code to exchange the access_token
+			xhr.send(JSON.stringify(postData));
+
+			xhr.onreadystatechange = function xhrReady(response) {
+				if (xhr.readyState === 4 && xhr.status == 200) {
+					console.log('reponse body: ', response);
+				}
+			};
+		});
+	</script>
+</body>
+</html>

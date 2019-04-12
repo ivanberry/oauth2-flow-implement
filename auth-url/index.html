@@ -48,7 +48,7 @@
 		grantNode.addEventListener('click', (ev) => {
 			// get all paramters
 			const urlParamsEntries = getParams().entries();
-			const TOKEN_URL = 'https://auth.icarbonx.com/oauth2/token';
+			const TOKEN_URL = 'https://auth.icarbonx.com/oauth2/authorize';
 
 			const postData = Object.create(null);
 
@@ -56,17 +56,17 @@
 				postData[o[0]] = o[1];
 			}
 
-			console.log(postData);
-
 			// new XML
 			const xhr = new XMLHttpRequest();
-
 			xhr.open('POST', TOKEN_URL); // get code to exchange the access_token
+			
+			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+
 			xhr.send(JSON.stringify(postData));
 
-			xhr.onreadystatechange = function xhrReady(response) {
+			xhr.onreadystatechange = function xhrReady() {
 				if (xhr.readyState === 4 && xhr.status == 200) {
-					console.log('reponse body: ', response);
+					console.log('reponse body: ', xhr.responseText);
 				}
 			};
 		});

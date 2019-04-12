@@ -1,5 +1,0 @@
-# oauth
-./main.go:23:8: resp.Text undefined (type Response has no field or method Text)
-./main.go:23:39: multiple-value fmt.Fprint() in single-value context
-./main.go:23:40: cannot use "Hello, %s" (type string) as type io.Writer in argument to fmt.Fprint:
-	string does not implement io.Writer (missing Write method)

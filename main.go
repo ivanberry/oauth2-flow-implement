@@ -18,6 +18,7 @@ type Message struct {
 	ID string `json:"app_id"` // json:  tell the struct how to populate
 	Key string `json:"app_key"`
 	Scope string `json:"scope"`
+	RedirectUri string `json:"redirect_uri"`
 }
 
 func (r *Response) text(code int, body string) {
@@ -45,15 +46,28 @@ func main() {
 			panic(err)
 		}
 
-		fmt.Println(msg)
-
 		if r.Method != "POST" {
 			resp.text(http.StatusNotFound, "Not Found")
 		} else {
-			resp.text(http.StatusOK, "Hello Token")
+
+			// 是否已经登陆，未登陆返回登陆页面
+
+			if msg.RedirectUri == ""  {
+				resp.text(http.StatusUnprocessableEntity, "Param redirect_uri Missing")
+				return
+			}
+
+			if msg.ID == "" {
+				resp.text(http.StatusUnprocessableEntity, "Param app id Missing")
+				return
+			}
+
+			// use some field to generate code
+			// and redirect to the redirect_uri
+			http.Redirect(w, r, msg.RedirectUri, 301)
 		}
 
-		// check all paramters
+		// check all param
 		// app_id
 		// app_key
 		// redirect_url

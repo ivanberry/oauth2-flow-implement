@@ -34,21 +34,19 @@
 
 		const grantNode = document.getElementById('grant');
 
-		function initPage(argument) {
+		function initPage() {
 			const params = getParams();
-			window.params = params;
 		}
 
 		function getParams() {
 			const {search} = window.location;
-			const urlParams = new URLSearchParams(search);
-			return urlParams;
+			return new URLSearchParams(search);
 		}
 
-		grantNode.addEventListener('click', (ev) => {
+		grantNode.addEventListener('click', () => {
 			// get all paramters
 			const urlParamsEntries = getParams().entries();
-			const TOKEN_URL = 'https://auth.icarbonx.com/oauth2/authorize';
+			const TOKEN_URL = 'http://dev.local.auth/oauth2/authorize';
 
 			const postData = Object.create(null);
 
@@ -60,12 +58,12 @@
 			const xhr = new XMLHttpRequest();
 			xhr.open('POST', TOKEN_URL); // get code to exchange the access_token
 			
-			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+			xhr.setRequestHeader("Content-Type", "application/json")
 
 			xhr.send(JSON.stringify(postData));
 
 			xhr.onreadystatechange = function xhrReady() {
-				if (xhr.readyState === 4 && xhr.status == 200) {
+				if (xhr.readyState === 4 && xhr.status === 200) {
 					console.log('reponse body: ', xhr.responseText);
 				}
 			};

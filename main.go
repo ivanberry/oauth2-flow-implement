@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -14,9 +15,9 @@ type Response struct {
 
 // Message custom message
 type Message struct {
-	appID string
-	scope string
-	state string
+	ID string `json:"app_id"` // json:  tell the struct how to populate
+	Key string `json:"app_key"`
+	Scope string `json:"scope"`
 }
 
 func (r *Response) text(code int, body string) {
@@ -27,17 +28,21 @@ func (r *Response) text(code int, body string) {
 
 func main() {
 
+	// ping-pong service
+	http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("pong")
+	})
+
 	// get token endpoint
 	http.HandleFunc("/oauth2/authorize", func(w http.ResponseWriter, r *http.Request) {
 
-		fmt.Println(r.FormValue("app_id"))
+		decoder := json.NewDecoder(r.Body)
+		var msg Message
+		err := decoder.Decode(&msg)
 		resp := Response{w}
 
-		// populate msg
-		msg := &Message{
-			appID: r.FormValue("app_id"),
-			scope: r.FormValue("scope"),
-			state: r.FormValue("state"),
+		if err != nil {
+			panic(err)
 		}
 
 		fmt.Println(msg)

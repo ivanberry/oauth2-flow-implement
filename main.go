@@ -64,7 +64,7 @@ func main() {
 
 			// use some field to generate code
 			// and redirect to the redirect_uri
-			http.Redirect(w, r, msg.RedirectUri, 301)
+			http.Redirect(w, r, msg.RedirectUri, http.StatusFound)
 		}
 
 		// check all param

@@ -34,6 +34,13 @@ func main() {
 		fmt.Println("pong")
 	})
 
+	// register
+	http.HandleFunc("register", func(writer http.ResponseWriter, r *http.Request) {
+
+	})
+
+	// login
+
 	// get token endpoint
 	http.HandleFunc("/oauth2/authorize", func(w http.ResponseWriter, r *http.Request) {
 
@@ -51,7 +58,6 @@ func main() {
 		} else {
 
 			// 是否已经登陆，未登陆返回登陆页面
-
 			if msg.RedirectUri == ""  {
 				resp.text(http.StatusUnprocessableEntity, "Param redirect_uri Missing")
 				return
